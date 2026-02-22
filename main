@@ -1,1 +1,95 @@
+# Feb 2 task based on 6.3.py 
+# using pygame library
 
+import pygame
+# to install PyGame: open a command prompt and type "python -m pip install -U pygame --user"
+
+#-------------------------------------------------------------------
+# INITIALIZATION
+#-------------------------------------------------------------------
+# A. Initialize Pygame
+pygame.init()
+
+# B. Set up display constants
+WIDTH, HEIGHT = 640, 480
+FPS = 60 # Increased FPS for smoother movement
+
+# C. Create the game window and clock
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Pygame Example")
+clock = pygame.time.Clock()
+
+# D. Define game variables
+# Define colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+# Create a rectangle object (x, y, width, height)
+player_rect = pygame.Rect(WIDTH // 2, HEIGHT // 2, 30, 30)
+
+############################
+# Feb2
+enemy_rect = pygame.Rect(100,100, 50, 50)   # new coordinates and size for enemy
+enemy_visible = True
+RED = (255, 0, 0)
+############################
+
+# Define movement speed
+player_speed = 5
+
+#-------------------------------------------------------------------
+# MAIN GAME LOOP
+#-------------------------------------------------------------------
+end = False
+while not end:
+    #---------------------------------------------------------------
+    # UPDATE: 
+    # A. Event handling: Check for user input
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            end = True
+
+        # --- Handle Key Presses (KEYDOWN) ---
+        if event.type == pygame.KEYDOWN:
+            # arrow keys
+            if event.key == pygame.K_LEFT:
+                player_rect.x += -player_speed
+            if event.key == pygame.K_RIGHT:
+                player_rect.x += player_speed
+            if event.key == pygame.K_UP:
+                player_rect.y += -player_speed
+            if event.key == pygame.K_DOWN:
+                player_rect.y += player_speed
+
+            # Escape key 
+            if event.key == pygame.K_ESCAPE:
+                end = True
+    ############################
+    # Feb2
+    if player_rect.x > enemy_rect.x and player_rect.x < enemy_rect.x + enemy_rect.width and \
+       player_rect.y > enemy_rect.y and player_rect.y < enemy_rect.y + enemy_rect.height:
+        enemy_visible = False
+    # alternative way to check collision using built-in function
+    if player_rect.colliderect(enemy_rect):
+        enemy_visible = False
+    ############################
+
+    #---------------------------------------------------------------
+    # DRAW
+    # A. Clear screen and draw the player rectangle
+    screen.fill(BLACK)
+    # B. draw player and enemy
+    pygame.draw.rect(screen, WHITE, player_rect)
+
+    ############################
+    # Feb2
+    if enemy_visible == True:
+        pygame.draw.rect(screen, RED, enemy_rect)
+    ############################
+
+    # C. Update the display and cap frame rate
+    pygame.display.flip()
+    clock.tick(FPS)
+
+# Quit Pygame
+pygame.quit()
