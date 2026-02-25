@@ -36,6 +36,9 @@ RED = (255, 0, 0)
 
 # Define movement speed
 player_speed = 5
+#movement variables
+player_rect_dx = 0
+player_dy = 0
 
 #-------------------------------------------------------------------
 # MAIN GAME LOOP
@@ -53,18 +56,36 @@ while not end:
         if event.type == pygame.KEYDOWN:
             # arrow keys
             if event.key == pygame.K_LEFT:
-                player_rect.x += -player_speed
+                player_rect_dx -= player_speed
             if event.key == pygame.K_RIGHT:
-                player_rect.x += player_speed
+                player_dx += player_speed
             if event.key == pygame.K_UP:
-                player_rect.y += -player_speed
+                player_dy += -player_speed
             if event.key == pygame.K_DOWN:
-                player_rect.y += player_speed
+                player_dy += player_speed
+
+        if event.type == pygame.KEYUP:
+            if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
+                player_dx = 0
+            if event.key in (pygame.K_UP, pygame.K_DOWN):
+                player_dx = 0
+
+
 
             # Escape key 
             if event.key == pygame.K_ESCAPE:
                 end = True
+
+            #Enemy movement 
+        if end == False:
+            enemy_rect.x += 5
+        if enemy_rect.x >= 300:
+            enemy_rect.x -=5
+        elif enemy_rect.x <= 10:
+             enemy_rect.x += 5
     ############################
+    player_rect_dx += player_speed
+    player_dy += player_speed
     # Feb2
     if player_rect.x > enemy_rect.x and player_rect.x < enemy_rect.x + enemy_rect.width and \
        player_rect.y > enemy_rect.y and player_rect.y < enemy_rect.y + enemy_rect.height:
