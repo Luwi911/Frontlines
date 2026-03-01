@@ -1,6 +1,8 @@
 # Feb 2 task based on 6.3.py 
 # using pygame library
 
+from turtle import color
+
 import pygame
 # to install PyGame: open a command prompt and type "python -m pip install -U pygame --user"
 
@@ -18,33 +20,23 @@ FPS = 60 # Increased FPS for smoother movement
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pygame Example")
 clock = pygame.time.Clock()
-CS = 0
-Scenes = ["images/peexle 3.gif","images/peexle 4.gif","images/peexle 5.gif","images/peexle 6.gif"]
-bg_image = pygame.image.load(Scenes[CS])
-def Thing():
-    CS = CS+1
-    
+
+#class Button:
+   # def __init__(self, x, y, width, height, text, color=(100, 100, 100), hover_color=(150, 150, 150)):
+      # mouse = pygame.mouse.get_pos()
+      # click = pygame.mouse.get_pressed()
+       #if x < mouse[0] < x + width and y < mouse[1] < y + height:
+        #   pygame.draw.rect(screen, hover_color, (x, y, width, height))
+         #  if click[0] == 1 and Thing is not None:
+       #        Thing()
+       #else:
+       #     pygame.draw.rect(screen, color, (x, y, width, height))
+       #     smallText = pygame.font.SysFont('Arial', 20)
+       #     textSurf = smallText.render(text, True, (0, 0, 0))
+       #     textRect = textSurf.get_rect(center=(x + width // 2, y + height // 2))
+        #    screen.blit(textSurf, textRect)
 
 
-class Button:
-    def __init__(self, x, y, width, height, text, color=(100, 100, 100), hover_color=(150, 150, 150)):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.text = text
-        self.color = color
-        self.hover_color = hover_color
-        self.font = pygame.font.SysFont(None, 36)
-        self.text_surf = self.font.render(text, True, (255, 255, 255))
-        self.text_rect = self.text_surf.get_rect(center=self.rect.center)
-
-    def draw(self, screen):
-        color = self.hover_color if self.rect.collidepoint(pygame.mouse.get_pos()) else self.color
-        pygame.draw.rect(screen, color, self.rect)
-        screen.blit(self.text_surf, self.text_rect)
-
-    def is_clicked(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left mouse button
-            return self.rect.collidepoint(event.pos)
-        return False
 # D. Define game variables
 # Define colors
 BLACK = (0, 0, 0)
@@ -53,7 +45,6 @@ WHITE = (255, 255, 255)
 # Create a rectangle object (x, y, width, height)
 player_rect = pygame.Rect(WIDTH // 2, HEIGHT // 2, 30, 30)
 
-button = Button(100, 100, 200, 50, "Click Me")
 ############################
 # Feb2
 enemy_rect = pygame.Rect(100,100, 50, 50)   # new coordinates and size for enemy
@@ -70,18 +61,6 @@ player_dy = 0
 #-------------------------------------------------------------------
 # MAIN GAME LOOP
 #-------------------------------------------------------------------
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-       
-
-    screen.fill((50, 50, 50))
-    button.draw(screen)
-    pygame.display.flip()
-    clock.tick(60)
-
 end = False
 while not end:
     #---------------------------------------------------------------
@@ -95,13 +74,13 @@ while not end:
         if event.type == pygame.KEYDOWN:
             # arrow keys
             if event.key == pygame.K_LEFT:
-                player_rect_dx = -player_speed
+                player_rect.x += -player_speed
             if event.key == pygame.K_RIGHT:
-                player_dx += player_speed
+                player_rect.x += player_speed
             if event.key == pygame.K_UP:
-                player_dy += -player_speed
+                player_rect.y += -player_speed
             if event.key == pygame.K_DOWN:
-                player_dy += player_speed
+                player_rect.y += player_speed
 
         if event.type == pygame.KEYUP:
             if event.key in (pygame.K_LEFT, pygame.K_RIGHT):
@@ -123,8 +102,8 @@ while not end:
         elif enemy_rect.x <= 10:
              enemy_rect.x += 5
     ############################
-    player_rect_dx += player_speed
-    player_dy += player_speed
+   # player_rect_dx += player_speed
+    #player_dy += player_speed
     # Feb2
     if player_rect.x > enemy_rect.x and player_rect.x < enemy_rect.x + enemy_rect.width and \
        player_rect.y > enemy_rect.y and player_rect.y < enemy_rect.y + enemy_rect.height:
@@ -141,7 +120,6 @@ while not end:
     # B. draw player and enemy
     pygame.draw.rect(screen, WHITE, player_rect)
     screen.fill((50, 50, 50))
-    button.draw(screen)
     pygame.display.flip()
     clock.tick(60)
 
